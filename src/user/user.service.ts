@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,13 @@ export class UserService {
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
     // 使用 plainToClass 将 CreateUserDto 转换为 User 实体对象
-    const newUser = plainToClass(User, createUserDto);
+    const { password, ...userData } = createUserDto;
+    const hashedPassword = await bcrypt.hash(password, 10); // 使用bcrypt对密码进行哈希，10是盐值轮数
+
+    const newUser = plainToClass(User, {
+      ...userData,
+      password: hashedPassword,
+    });
     return this.userRepository.save(newUser);
   }
 

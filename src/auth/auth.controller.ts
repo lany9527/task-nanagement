@@ -1,11 +1,10 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Post,
-  Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/public.decorator';
@@ -17,12 +16,18 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
-  }
+  async login(@Body() data: { username: string; password: string }) {
+    const { username, password } = data;
 
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+    const user = await this.authService.validateUser(username, password);
+
+    if (!user) {
+      throw new NotFoundException(`用户或密码不正确`);
+    }
+
+    // 用户验证成功，生成访问令牌
+    const accessToken = await this.authService.generateAccessToken(user);
+
+    return { token: accessToken, user };
   }
 }
