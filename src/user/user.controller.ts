@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
@@ -47,14 +48,19 @@ export class UserController {
   async login(
     @Body() data: { username: string; password: string },
   ): Promise<User | undefined> {
+    console.log('login ', data);
     const { username, password } = data;
     const user = await this.userService.findUserByUsername(username);
-    if (!user || user.password !== password) {
-      return undefined;
+    console.log('user ', user);
+    if (!user) {
+      throw new NotFoundException(`用户${username}不存在`);
+    } else if (user.password !== password) {
+      throw new NotFoundException(`用户或密码不正确`);
     }
     return user;
   }
 
+  @Public()
   @Post('register')
   async register(@Body() userData: CreateUserDto): Promise<User> {
     console.log('register ', userData);
