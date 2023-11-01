@@ -46,7 +46,7 @@ export class UserController {
     return this.userService.remove(id);
   }
 
-  @Post('login')
+  /*@Post('login')
   async login(
     @Body() data: { username: string; password: string },
   ): Promise<User | undefined> {
@@ -60,7 +60,7 @@ export class UserController {
       throw new NotFoundException(`用户或密码不正确`);
     }
     return user;
-  }
+  }*/
 
   @Public()
   @Post('register')
