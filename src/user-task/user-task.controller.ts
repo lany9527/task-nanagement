@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Param, Get } from '@nestjs/common';
+import { Controller, Post, Delete, Param, Get, Body } from '@nestjs/common';
 import { UserTaskService } from './user-task.service';
 
 @Controller('user-task')
@@ -6,10 +6,9 @@ export class UserTaskController {
   constructor(private readonly userTaskService: UserTaskService) {}
 
   @Post('addUserToTask')
-  async addUserToTask(
-    @Param('userId') userId: number,
-    @Param('taskId') taskId: number,
-  ) {
+  async addUserToTask(@Body() data: { userId: number; taskId: number }) {
+    const { userId, taskId } = data;
+    console.log('co addUserToTask ', userId, taskId);
     const userTask = await this.userTaskService.addUserToTask(userId, taskId);
     return userTask;
   }

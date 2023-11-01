@@ -12,13 +12,6 @@ export class UserTaskService {
     private userTaskRepository: Repository<UserTask>,
   ) {}
 
-  async addUserToTask2(userId: number, taskId: number): Promise<UserTask> {
-    const userTask = new UserTask();
-    userTask.user = { id: userId } as User;
-    userTask.task = { id: taskId } as Task;
-    return this.userTaskRepository.save(userTask);
-  }
-
   async addUserToTask(userId: number, taskId: number): Promise<UserTask> {
     const userTask = new UserTask();
 
