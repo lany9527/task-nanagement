@@ -6,6 +6,8 @@ import {
   Get,
   Body,
   Query,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { UserTaskService } from './user-task.service';
 
@@ -44,7 +46,8 @@ export class UserTaskController {
     console.log('getTasksByUserId ', userId);
     if (userId === undefined || userId === null) {
       // 如果userId为空，返回错误响应
-      return { error: 'userId is required' };
+      // return { error: 'userId is required' };
+      throw new HttpException('userId is required', HttpStatus.BAD_REQUEST);
     }
     const tasks = await this.userTaskService.getTasksByUserId(userId);
     return tasks;
