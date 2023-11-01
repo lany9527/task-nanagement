@@ -35,7 +35,7 @@ export class UserTaskController {
   async getUsersByTaskId(@Query('taskId') taskId: number) {
     if (taskId === undefined || taskId === null) {
       // 如果userId为空，返回错误响应
-      return { error: 'taskId is required' };
+      throw new HttpException('taskId is required', HttpStatus.BAD_REQUEST);
     }
     const users = await this.userTaskService.getUsersByTaskId(taskId);
     return users;
@@ -46,7 +46,6 @@ export class UserTaskController {
     console.log('getTasksByUserId ', userId);
     if (userId === undefined || userId === null) {
       // 如果userId为空，返回错误响应
-      // return { error: 'userId is required' };
       throw new HttpException('userId is required', HttpStatus.BAD_REQUEST);
     }
     const tasks = await this.userTaskService.getTasksByUserId(userId);
