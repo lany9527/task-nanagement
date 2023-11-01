@@ -8,11 +8,11 @@ export class UserTask {
   id: number;
 
   @ManyToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => Task)
-  @JoinColumn()
+  @JoinColumn({ name: 'task_id' })
   task: Task;
 
   // 其他属性

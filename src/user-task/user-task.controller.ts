@@ -1,4 +1,12 @@
-import { Controller, Post, Delete, Param, Get, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Delete,
+  Param,
+  Get,
+  Body,
+  Query,
+} from '@nestjs/common';
 import { UserTaskService } from './user-task.service';
 
 @Controller('user-task')
@@ -21,15 +29,24 @@ export class UserTaskController {
     await this.userTaskService.removeUserFromTask(userId, taskId);
   }
 
-  @Get('users-for-task/:taskId')
-  async getUsersForTask(@Param('taskId') taskId: number) {
-    const users = await this.userTaskService.getUsersForTask(taskId);
+  @Get('getUsersByTaskId')
+  async getUsersByTaskId(@Query('taskId') taskId: number) {
+    if (taskId === undefined || taskId === null) {
+      // 如果userId为空，返回错误响应
+      return { error: 'taskId is required' };
+    }
+    const users = await this.userTaskService.getUsersByTaskId(taskId);
     return users;
   }
 
-  @Get('tasks-for-user/:userId')
-  async getTasksForUser(@Param('userId') userId: number) {
-    const tasks = await this.userTaskService.getTasksForUser(userId);
+  @Get('getTasksByUserId')
+  async getTasksByUserId(@Query('userId') userId: number) {
+    console.log('getTasksByUserId ', userId);
+    if (userId === undefined || userId === null) {
+      // 如果userId为空，返回错误响应
+      return { error: 'userId is required' };
+    }
+    const tasks = await this.userTaskService.getTasksByUserId(userId);
     return tasks;
   }
 }

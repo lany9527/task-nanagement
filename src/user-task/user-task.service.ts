@@ -33,7 +33,7 @@ export class UserTaskService {
       .execute();
   }
 
-  async getUsersForTask(taskId: number): Promise<User[]> {
+  async getUsersByTaskId(taskId: number): Promise<User[]> {
     const userTasks = await this.userTaskRepository.find({
       where: { task: { id: taskId } },
       relations: ['user'],
@@ -41,7 +41,7 @@ export class UserTaskService {
     return userTasks.map((userTask) => userTask.user);
   }
 
-  async getTasksForUser(userId: number): Promise<Task[]> {
+  async getTasksByUserId(userId: number): Promise<Task[]> {
     const userTasks = await this.userTaskRepository.find({
       where: { user: { id: userId } },
       relations: ['task'],
