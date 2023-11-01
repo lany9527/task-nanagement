@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './global/filter/http-exception.filter';
 import { ResponseFormatInterceptor } from './global/interceptor/response-format/response-format.interceptor';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // 应用全局的异常过滤器
@@ -20,11 +19,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api', app, document);
-
-  const options = {
-    explorer: true,
-    customCss: './swagger-ui.css',
-  };
 
   await app.listen(3000);
 }
