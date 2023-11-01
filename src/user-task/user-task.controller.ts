@@ -10,7 +10,9 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { UserTaskService } from './user-task.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('user-task')
 @Controller('user-task')
 export class UserTaskController {
   constructor(private readonly userTaskService: UserTaskService) {}
