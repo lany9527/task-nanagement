@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -16,10 +17,11 @@ export class UserService {
     // 使用 plainToClass 将 CreateUserDto 转换为 User 实体对象
     const { password, ...userData } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10); // 使用bcrypt对密码进行哈希，10是盐值轮数
-
+    const defaultRoles = ['user']; // 设置默认的角色数组
     const newUser = plainToClass(User, {
       ...userData,
       password: hashedPassword,
+      roles: userData.roles || defaultRoles, // 如果没有传入 roles，则使用默认值
     });
     return this.userRepository.save(newUser);
   }
@@ -32,9 +34,18 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async update(user: User): Promise<User> {
-    await this.userRepository.update(user.id, user);
-    return this.userRepository.findOne({ where: { id: user.id } });
+  async update(updateUserDto: UpdateUserDto): Promise<User> {
+    // 使用 plainToClass 将 updateUserDto 转换为 User 实体对象
+    const { id, password, ...userData } = updateUserDto;
+    const hashedPassword = await bcrypt.hash(password, 10); // 使用bcrypt对密码进行哈希，10是盐值轮数
+    const defaultRoles = ['user']; // 设置默认的角色数组
+    const newUser = plainToClass(User, {
+      ...userData,
+      password: hashedPassword,
+      roles: userData.roles || defaultRoles, // 如果没有传入 roles，则使用默认值
+    });
+    await this.userRepository.update(id, newUser);
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async remove(id: number): Promise<void> {

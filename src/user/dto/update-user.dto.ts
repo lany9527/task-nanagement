@@ -1,9 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+// import { PartialType } from '@nestjs/mapped-types';
+// import { CreateUserDto } from './create-user.dto';
+import { IsArray, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdateUserDto {
   @ApiProperty({
     description: 'id',
   })
@@ -49,9 +49,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @ApiProperty({
     description: '出生日期',
-    minimum: 0,
   })
-  birth: Date;
+  birth: string;
 
   @ApiProperty({
     description: '性别;  男 = 0, 女 = 1,',
@@ -72,5 +71,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({
     description: '用户角色',
   })
+  @IsArray()
   roles: string[];
 }

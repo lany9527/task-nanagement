@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
   @ApiProperty({
@@ -40,9 +40,8 @@ export class CreateUserDto {
 
   @ApiProperty({
     description: '出生日期',
-    minimum: 0,
   })
-  birth: Date;
+  birth: string;
 
   @ApiProperty({
     description: '性别;  男 = 0, 女 = 1,',
@@ -63,5 +62,6 @@ export class CreateUserDto {
   @ApiProperty({
     description: '用户角色',
   })
+  @IsArray()
   roles: string[];
 }

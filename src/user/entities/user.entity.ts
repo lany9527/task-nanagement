@@ -5,16 +5,17 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
+import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn() // 自动生成创建日期
+  @CreateDateColumn({ type: 'datetime' }) // 自动生成创建日期
   createdAt: Date;
 
-  @UpdateDateColumn() // 自动生成更新日期
+  @UpdateDateColumn({ type: 'datetime' }) // 自动生成更新日期
   updatedAt: Date;
 
   @Column()
@@ -35,8 +36,8 @@ export class User {
   @Column()
   age: number;
 
-  @Column({ type: 'date' }) // 定义日期属性
-  birth: Date;
+  @Column()
+  birth: string;
 
   @Column()
   sex: string;
@@ -47,6 +48,6 @@ export class User {
   @Column()
   avatar: string;
 
-  @Column()
+  @Column('json')
   roles: string[];
 }
