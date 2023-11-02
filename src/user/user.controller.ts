@@ -30,9 +30,12 @@ export class UserController {
   findAll(
     @Query('page') page: number,
     @Query('limit') limit: number,
-    @Query('searchParams') searchParams: string,
+    @Query('searchParams') searchParams?: string,
   ) {
-    const parsedSearchParams = JSON.parse(searchParams);
+    let parsedSearchParams;
+    if (searchParams) {
+      parsedSearchParams = JSON.parse(searchParams);
+    }
     return this.userService.findAll(page, limit, parsedSearchParams);
   }
 
