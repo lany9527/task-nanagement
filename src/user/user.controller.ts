@@ -27,8 +27,13 @@ export class UserController {
   }
 
   @Get('list')
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.userService.findAll(page, limit);
+  findAll(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Query('searchParams') searchParams: string,
+  ) {
+    const parsedSearchParams = JSON.parse(searchParams);
+    return this.userService.findAll(page, limit, parsedSearchParams);
   }
 
   @Get(':id')

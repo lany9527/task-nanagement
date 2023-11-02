@@ -28,8 +28,29 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  async findAll(page: number, limit: number): Promise<Pagination<User>> {
-    return paginate<User>(this.userRepository, { page, limit });
+  /**
+   * 获取用户列表
+   * @param page
+   * @param limit
+   * @param searchParams
+   */
+  async findAll(
+    page: number,
+    limit: number,
+    searchParams?: object,
+  ): Promise<Pagination<User>> {
+    const queryBuilder = this.userRepository.createQueryBuilder('user');
+    if (searchParams) {
+      for (const key in searchParams) {
+        if (searchParams[key]) {
+          queryBuilder.andWhere(`user.${key} LIKE :${key}`, {
+            [key]: `%${searchParams[key]}%`,
+          });
+        }
+      }
+    }
+
+    return paginate<User>(queryBuilder, { page, limit });
   }
 
   async findOne(id: number): Promise<User> {
