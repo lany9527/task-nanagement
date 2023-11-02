@@ -6,6 +6,7 @@ import { plainToClass } from 'class-transformer';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { Pagination, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     // 使用 plainToClass 将 CreateUserDto 转换为 User 实体对象
     const { password, ...userData } = createUserDto;
@@ -26,8 +28,8 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async findAll(page: number, limit: number): Promise<Pagination<User>> {
+    return paginate<User>(this.userRepository, { page, limit });
   }
 
   async findOne(id: number): Promise<User> {

@@ -7,6 +7,7 @@ import {
   Delete,
   NotFoundException,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,8 +27,8 @@ export class UserController {
   }
 
   @Get('list')
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.userService.findAll(page, limit);
   }
 
   @Get(':id')
